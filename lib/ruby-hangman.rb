@@ -9,7 +9,7 @@ input = File.open('./google-10000-english-no-swears.txt', 'r') do |file|
     end
 end
 
-def word_picker
+def word_picker(dictionary)
     #picks word at "random" from array
     dictionary[rand(0..dictionary.length)]
 end
