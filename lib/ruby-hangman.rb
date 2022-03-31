@@ -1,4 +1,26 @@
+require 'digest'
+
 module Hangman
+    class Hangman_Game
+        def initialize(target_word)
+            @game_name
+            @guesses_remaining
+            @target_word
+            @progress
+        end
+
+        def save_game()
+
+        end
+
+        def load_game()
+
+        end
+    end
+
+    class Menus
+
+    end
     
     class Word_Bank
         def initialize()
