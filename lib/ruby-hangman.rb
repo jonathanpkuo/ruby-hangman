@@ -2,19 +2,29 @@ require 'digest'
 
 module Hangman
     class Hangman_Game
-        def initialize(target_word)
-            @game_name
-            @guesses_remaining
-            @target_word
-            @progress
+        attr_accessor :target_word, :progress, :guess_count
+        def initialize(target_word, guess_count=0, progress=Array.new(target_word.length))
+            @target_word = target_word
+            @guess_count = guess_count
+            @progress = progress
+        end
+
+        def to_yaml
+            YAML.dump ({
+                :guess_count => @guess_count,
+                :target_word => @target_word,
+                :progress => @progress
+            })
         end
 
         def save_game()
-
+            filename = "#{@game_name.downcase}.yaml"
+            File.open(filename, 'w') { |file| file.write(self.to_yaml)}
         end
 
-        def load_game()
-
+        def self.load_game(file)
+            data = YAML.load(File.read(file))
+            self.new(data[:target_word], data[:guess_count], data[:progress])
         end
     end
 
