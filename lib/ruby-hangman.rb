@@ -35,6 +35,7 @@ module Hangman
     class Word_Bank
         def initialize()
             @dictionary = Array.new()
+            populate
         end
 
         def print_dictionary
