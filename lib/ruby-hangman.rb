@@ -1,8 +1,10 @@
-require 'digest'
+require 'io/console'
 
 module Hangman
+
     class Hangman_Game
         attr_accessor :target_word, :progress, :guess_count
+
         def initialize(target_word, guess_count=0, progress=Array.new(target_word.length))
             @target_word = target_word
             @guess_count = guess_count
@@ -17,8 +19,8 @@ module Hangman
             })
         end
 
-        def save_game()
-            filename = "#{@game_name.downcase}.yaml"
+        def save_game(string)
+            filename = "#{string.downcase}.yaml"
             File.open(filename, 'w') { |file| file.write(self.to_yaml)}
         end
 
@@ -28,8 +30,17 @@ module Hangman
         end
     end
 
-    class Menus
+    class Input_Manager
+        attr_accessor :io_buffer
 
+        def initialize
+            @io_buffer = Array.new()
+        end
+
+        def acquire_input
+            @io_buffer.clear() if @io_buffer.length > 0
+            @io_buffer.push(STDIN.getch)
+        end
     end
     
     class Word_Bank
@@ -60,5 +71,3 @@ module Hangman
     end
 
 end
-
-game = Hangman::Word_Bank.new()
