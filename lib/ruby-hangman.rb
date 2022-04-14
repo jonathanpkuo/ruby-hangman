@@ -1,5 +1,3 @@
-require 'io/console'
-
 module Hangman
 
     class Hangman_Game
@@ -9,6 +7,45 @@ module Hangman
             @target_word = target_word
             @guess_count = guess_count
             @progress = progress
+            @input_buffer = []
+        end
+
+        def print_status
+            puts "@target_word is #{@target_word} \n @guess_count is #{guess_count} \n @progress is #{progress} \n @input_buffer is #{@input_buffer}."
+        end
+
+        def take_input()
+            @input_buffer.clear() if input_buffer.length > 0
+            @input_buffer.push(STDIN.getch)
+        end
+        
+        def game_play_loop
+            until (@guess_count == 6)
+                
+            end
+        end
+
+        def game_menu()
+            puts "MENU"
+            puts "- 1 - Save Game"
+            puts "- 2 - Return to Game"
+            puts "- 3 - Return to Main Menu"
+            puts "- 4 - Quit"
+            take_input()
+            case @input_buffer[0]
+            when "1"
+                filename = gets.chomp()
+                save_game(filename)
+            when "2"
+
+            when "3"
+
+            when "4"
+                exit
+            else 
+                puts "Invalid Input"
+                game_menu()
+            end
         end
 
         def to_yaml
@@ -30,27 +67,50 @@ module Hangman
         end
     end
 
-    class Input_Manager
+    class Display_IO
         attr_accessor :io_buffer
 
         def initialize
-            @io_buffer = Array.new()
+            @io_buffer = []
+            @wb = Hangman::Word_Bank.new()
         end
 
-        def acquire_input
+        def acquire_input()
             @io_buffer.clear() if @io_buffer.length > 0
             @io_buffer.push(STDIN.getch)
         end
+
+        def main_menu()
+            puts "- 1 - New Game"
+            puts "- 2 - Load Game"
+            puts "- 3 - Exit"
+            acquire_input()
+            case @io_buffer[0]
+            when "1"
+                game = Hangman::Hangman_Game.new(@wb.word_picker)
+                game.print_status
+                main_menu()
+            when "2"
+                load_game_menu()
+                main_menu()
+            when "3"
+                exit
+            else
+                puts "Invalid Entry"
+                main_menu()
+            end
+        end
+
+        def load_game_menu()
+            filelist = Dir.glob("saves/*.yaml")
+        end
+
     end
     
     class Word_Bank
         def initialize()
             @dictionary = Array.new()
             populate
-        end
-
-        def print_dictionary
-            puts @dictionary
         end
 
         def populate
@@ -71,3 +131,6 @@ module Hangman
     end
 
 end
+
+dis = Hangman::Display_IO.new()
+dis.main_menu()
