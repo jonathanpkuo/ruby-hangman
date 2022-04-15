@@ -77,8 +77,7 @@ module Hangman
             puts "MENU"
             puts "- 1 - Save Game"
             puts "- 2 - Return to Game"
-            puts "- 3 - Return to Main Menu"
-            puts "- 4 - Quit"
+            puts "- 3 - Quit"
             take_input()
             case @input_buffer[0]
             when "1"
@@ -86,10 +85,8 @@ module Hangman
                 filename = gets.chomp()
                 save_game(filename)
             when "2"
-                self.game_play_loop
-            when "3"
                 return
-            when "4"
+            when "3"
                 exit
             else 
                 puts "Invalid Input"
@@ -152,8 +149,82 @@ module Hangman
             end
         end
 
-        def load_game_menu()
+        def load_game_menu(page_number = 0)
             filelist = Dir.glob("saves/*.yaml")
+            if filelist.length() < 1
+                puts "No Files to load"
+                return
+            end
+            save_files = filelist.each_slice(5).to_a
+            puts "Select file or option:       | Page #{page_number + 1} of #{save_files.length()}"
+            adder = 0
+            for x in save_files[page_number]
+                puts "- #{adder + 1} - #{x}"
+                adder += 1
+            end
+            puts "- 6 - Next Page" if page_number < (save_files.length() -1)
+            puts "- 7 - Previous Page" if page_number > 0
+            puts "- 8 - Exit"
+            acquire_input()
+            case @io_buffer[0]
+            when "1"
+                game = Hangman::Hangman_Game.load_game(save_files[page_number][0])
+                game.game_play_loop
+                main_menu()
+            when "2"
+                if adder > 1
+                    game = Hangman::Hangman_Game.load_game(save_files[page_number][1])
+                    game.game_play_loop
+                    main_menu()
+                else
+                    puts "Invalid Input"
+                    load_game_menu(page_number)
+                end
+            when "3"
+                if adder > 2
+                    game = Hangman::Hangman_Game.load_game(save_files[page_number][2])
+                    game.game_play_loop
+                    main_menu()
+                else
+                    puts "Invalid Input"
+                    load_game_menu(page_number)
+                end
+            when "4"
+                if adder > 3
+                    game = Hangman::Hangman_Game.load_game(save_files[page_number][3])
+                    game.game_play_loop
+                    main_menu()
+                else
+                    puts "Invalid Input"
+                    load_game_menu(page_number)
+                end
+            when "5"
+                if adder > 4
+                    game = Hangman::Hangman_Game.load_game(save_files[page_number][4])
+                    game.game_play_loop
+                    main_menu()
+                else
+                    puts "Invalid Input"
+                    load_game_menu(page_number)
+                end
+            when "6"
+                if page_number < (save_files.length() - 1)
+                    load_game_menu(page_number + 1)
+                else
+                    puts "Invalid Input"
+                    load_game_menu(page_number)
+                end
+            when "7"
+                if page_number > 0
+                    load_game_menu(page_number -1)
+                else
+                    puts "Invalid Input"
+                    load_game_menu(page_number)
+                end
+            else
+                puts "Invalid Input"
+                load_game_menu(page_number)
+            end
         end
 
     end
