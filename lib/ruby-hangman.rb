@@ -168,41 +168,31 @@ module Hangman
             acquire_input()
             case @io_buffer[0]
             when "1"
-                game = Hangman::Hangman_Game.load_game(save_files[page_number][0])
-                game.game_play_loop
-                main_menu()
+                game_loader(save_files[page_number][0])
             when "2"
                 if adder > 1
-                    game = Hangman::Hangman_Game.load_game(save_files[page_number][1])
-                    game.game_play_loop
-                    main_menu()
+                    game_loader(save_files[page_number][1])
                 else
                     puts "Invalid Input"
                     load_game_menu(page_number)
                 end
             when "3"
                 if adder > 2
-                    game = Hangman::Hangman_Game.load_game(save_files[page_number][2])
-                    game.game_play_loop
-                    main_menu()
+                    game_loader(save_files[page_number][2])
                 else
                     puts "Invalid Input"
                     load_game_menu(page_number)
                 end
             when "4"
                 if adder > 3
-                    game = Hangman::Hangman_Game.load_game(save_files[page_number][3])
-                    game.game_play_loop
-                    main_menu()
+                    game_loader(save_files[page_number][3])
                 else
                     puts "Invalid Input"
                     load_game_menu(page_number)
                 end
             when "5"
                 if adder > 4
-                    game = Hangman::Hangman_Game.load_game(save_files[page_number][4])
-                    game.game_play_loop
-                    main_menu()
+                    game_loader(save_files[page_number][5])
                 else
                     puts "Invalid Input"
                     load_game_menu(page_number)
@@ -225,6 +215,12 @@ module Hangman
                 puts "Invalid Input"
                 load_game_menu(page_number)
             end
+        end
+
+        def game_loader(filename)
+            game = Hangman::Hangman_Game.load_game(filename)
+            game.game_play_loop
+            main_menu()
         end
 
     end
