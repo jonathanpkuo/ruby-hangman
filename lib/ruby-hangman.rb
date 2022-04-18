@@ -61,6 +61,9 @@ module Hangman
             self.game_play_loop
         end
         
+        # Function that takes input letter and compares vs the target word (which has been split into characters)
+        # If it encounters a positive match, it iterates through the array to find the correct placement(s) for the letter
+        # Otherwise, it adds the letter to the list of incorrect guesses.
         def letter_entry(letter)
             if @wordsplit.any?(letter)
                 @wordsplit.each_with_index do |chars, index|
@@ -88,6 +91,9 @@ module Hangman
                 return
             when "3"
                 exit
+            # Hidden Menu option to check word/input buffer etc.
+            when "0"
+                self.print_status
             else 
                 puts "Invalid Input"
                 game_menu()
@@ -134,8 +140,9 @@ module Hangman
             acquire_input()
             case @io_buffer[0]
             when "1"
+                # Creates a new game
                 game = Hangman::Hangman_Game.new(@wb.word_picker)
-                game.print_status
+                # game.print_status # Debug statement
                 game.game_play_loop
                 main_menu()
             when "2"
@@ -155,6 +162,7 @@ module Hangman
                 puts "No Files to load"
                 return
             end
+            # save files splits the filelist into pages of at most 5 entries to keep menu limited.
             save_files = filelist.each_slice(5).to_a
             puts "Select file or option:       | Page #{page_number + 1} of #{save_files.length()}"
             adder = 0
@@ -225,6 +233,7 @@ module Hangman
 
     end
     
+    # Creates a dictionary for generating words.
     class Word_Bank
         def initialize()
             @dictionary = Array.new()
