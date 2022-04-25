@@ -66,6 +66,12 @@ module Hangman
         # If it encounters a positive match, it iterates through the array to find the correct placement(s) for the letter
         # Otherwise, it adds the letter to the list of incorrect guesses.
         def letter_entry(letter)
+            if (
+                @wrong_guesses.any?(letter) || @progress.any?(letter)
+            )
+                puts "Letter has already been used"
+                return
+            end
             if @wordsplit.any?(letter)
                 @wordsplit.each_with_index do |chars, index|
                     @progress[index] = letter if chars == letter
