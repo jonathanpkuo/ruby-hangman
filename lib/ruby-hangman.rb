@@ -34,13 +34,13 @@ module Hangman
             # Initial check to see if game is over (lose) gets is to pause
             if @chance_count == 0
                 puts "Game Over! You Lose!"
-                STDIN.getch
+                STDIN.getch # Used to pause or wait.
                 return
             # Secondary check for if game is over (win) gets is to pause
             elsif @progress.join == @target_word
                 puts "Progress so far: #{@progress.join(" ")}"
                 puts "Game Over! You Win!"
-                STDIN.getch
+                STDIN.getch # Used to pause or wait.
                 return
             # If no game over condition is true, allow for guess.
             else
