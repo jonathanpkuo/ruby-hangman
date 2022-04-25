@@ -1,4 +1,5 @@
 require 'yaml'
+require 'io/console'
 
 module Hangman
 
