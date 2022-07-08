@@ -3,6 +3,17 @@ require 'io/console'
 
 module Hangman
 
+=begin     
+    Hangman_Game class contains the entire game play loop for hangman -- it takes and processes input on its own and makes calls for menus when needed.
+
+    @target_word holds the word to be guessed
+    @chance_count keeps track of the number of wrong guesses (though it is possible to use wrong_guessses.length())
+    @progress is an array holding the letters the player has currently placed
+    @wordsplit is an array of the letters to be guessed, used primarily as a check to see if guesses are correct and where the letters should be placed.
+    @wrong_guesses is an array holding the wrong guesses in order to inform player of what he has already guessed.
+
+=end
+
     class Hangman_Game
         attr_accessor :target_word, :progress, :chance_count
 
@@ -25,6 +36,14 @@ module Hangman
             @input_buffer.clear() if @input_buffer.length > 0
             @input_buffer.push(STDIN.getch)
         end
+
+=begin
+    game_play_loop function :
+
+    The primary game play loop, calls itself so long as the exit conditions @chance_count == 0 and @progress.join == @target_word are not met.
+
+    The function has two procs meant to facilitate identification of input for case-switch to call the in-game menu or call the letter_entry function
+=end
         
         def game_play_loop
             # 2 procs for case-switch, using regex /[0-9]/ for nubmers & /[a-z]/ for letters (downcased)
@@ -127,6 +146,12 @@ module Hangman
         end
     end
 
+    # Display_IO class
+    #
+    # runs the initial main menu and load game menus -- serves as an in-between for dictionary class and the game class.
+    # @io_buffer (Not sure if needed?) holds input for later use
+    # @wb is the Word_Bank class used for word generation.
+
     class Display_IO
         attr_accessor :io_buffer
 
@@ -135,10 +160,18 @@ module Hangman
             @wb = Hangman::Word_Bank.new()
         end
 
+        # Basic function to take input
+        # uses @io_buffer as a means to hold the value taken by STDIN.getch
+        # Using this round-about method since it seems that it is impossible to immediately use a value provided by STDIN.getch?
+
         def acquire_input()
             @io_buffer.clear() if @io_buffer.length > 0
             @io_buffer.push(STDIN.getch)
         end
+
+        # main_menu() function
+        #
+        # Main menu, functions off case-switch to determine which option is selected.
 
         def main_menu()
             puts "- 1 - New Game"
